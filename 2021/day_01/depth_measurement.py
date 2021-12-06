@@ -13,6 +13,11 @@ from typing import List
 
 
 def find_increasing_depths(depths: List[int]) -> int:
+    """Count the number of times a value is higher than its previous index's value.
+
+    Args:
+        depths (List[int]): The list of values to inspect.
+    """
     total_increased = 0
     previous_depth = depths[0]
 
@@ -24,10 +29,27 @@ def find_increasing_depths(depths: List[int]) -> int:
     return total_increased
 
 
+def produce_windows(depths: List[int], window_size: int) -> List[List[int]]:
+    """Create a set a sliding windows of specified size from a given list.
+
+    Args:
+        depths (List[int]): A list of values to produce the windows from.
+        window_size (int): The size of windows to create.
+
+    Returns:
+        List[List[int]]: A list of windows, which are lists themselves containing
+            `window_size` entries.
+    """
+    return [depths[i : i + window_size] for i in range(len(depths) - window_size + 1)]
+
+
 def main(cli_args: Namespace):
     chall_txt = parse_file(cli_args.chall_input).strip().split("\n")
     chall_txt = list(map(int, chall_txt))
-    print(find_increasing_depths(chall_txt))
+    print(f"Day 1: Part 1: {find_increasing_depths(chall_txt)}")
+
+    window_sums = [sum(window) for window in produce_windows(chall_txt, 3)]
+    print(f"Day 1: Part 2: {find_increasing_depths(window_sums)}")
 
 
 if __name__ == "__main__":
