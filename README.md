@@ -9,3 +9,5 @@
 > Advent of Code is a registered trademark in the United States.
 
 This repo houses my code/solutions for the annual [Advent of Code](https://adventofcode.com/) programming advent calendar.
+
+There is an associated blog series for the content located [here](https://barelycompetent.dev/categories/advent-of-code/).
