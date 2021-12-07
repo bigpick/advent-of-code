@@ -36,9 +36,31 @@ def handle_commands(commands: List[str], x_cord: int, y_cord: int) -> Tuple[int,
     return x_cord, y_cord
 
 
+def handle_commands_with_aim(
+    commands: List[str], x_cord: int, y_cord: int, aim: int
+) -> Tuple[int, int]:
+    for command in commands:
+        command, movement = command.split()
+        match command:
+            case "forward":
+                x_cord += int(movement)
+                y_cord += int(movement) * aim
+            case "up":
+                aim -= int(movement)
+            case "down":
+                aim += int(movement)
+            case _:
+                print("Uh, you OK capt'n?")
+                exit(1)
+
+    return x_cord, y_cord
+
+
 def main(cli_args: Namespace):
     chall_txt = parse_file(cli_args.chall_input).strip().split("\n")
     x, y = handle_commands(chall_txt, 0, 0)
+    print(f"Day 2 part 1: {x*y}")
+    x, y = handle_commands_with_aim(chall_txt, 0, 0, 0)
     print(f"Day 2 part 1: {x*y}")
 
 
