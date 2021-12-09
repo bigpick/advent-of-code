@@ -197,6 +197,8 @@ cython_debug/
 /qbin
 
 # sbt's target directories
+.sbt
+.bsp
 /target/
 /project/**/target/
 /test/macro-annot/target/
