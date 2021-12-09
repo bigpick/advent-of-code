@@ -1,6 +1,6 @@
 package adventofcode
 
-import scala.util.{Try, Success, Failure}
+import scala.util.{Failure, Success, Try}
 import java.io.{File, FileNotFoundException}
 import scala.io.Source
 import scala.util.Using
@@ -20,7 +20,7 @@ object AOCCliParser {
           .required()
           .valueName("<challenge-input-file-path>")
           .action((x, c) => c.copy(challInput = x))
-          .text("challInput is a required file property")
+          .text("challInput is a required file property"),
       )
     }
 
@@ -28,7 +28,7 @@ object AOCCliParser {
     parsed match {
       case Some(conf) =>
         File(conf.challInput).exists match {
-          case true  => Success(conf)
+          case true => Success(conf)
           case false => Failure(FileNotFoundException("challInput file DNE"))
         }
       case _ =>

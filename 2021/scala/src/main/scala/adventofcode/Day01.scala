@@ -1,11 +1,9 @@
 package adventofcode
 
-import scala.util.{Try, Success, Failure}
+import scala.util.{Failure, Success, Try}
 
 object Day01Part1 {
-  def secondIsGreater(pairing: Seq[Int]): Boolean = {
-    pairing(1) > pairing(0)
-  }
+  def secondIsGreater(pairing: Seq[Int]): Boolean = { pairing(1) > pairing(0) }
 
   def findIncreasingDepths(lines: Seq[Int]): Int = {
     var totalIncreases = 0
@@ -20,20 +18,12 @@ object Day01Part1 {
   }
 
   def functionalFindIncreasingDepths(lines: Seq[Int]): Int = {
-    lines
-      .sliding(2)
-      .toSeq
-      .map(pairing => secondIsGreater(pairing))
-      .count(_ == true)
+    lines.sliding(2).toSeq.map(pairing => secondIsGreater(pairing)).count(_ == true)
   }
 }
 
 object Day01Part2 {
-  def produceWindows(
-      windowSize: Int,
-      overlap: Int = 1,
-      items: Seq[Int]
-  ): Seq[Seq[Int]] = {
+  def produceWindows(windowSize: Int, overlap: Int = 1, items: Seq[Int]): Seq[Seq[Int]] = {
     items.sliding(windowSize, overlap).toSeq
   }
 }
@@ -46,7 +36,7 @@ object Day01 {
     val config = parseCli(args)
     val cliArgs = config match {
       case Success(conf) => conf
-      case Failure(e)    => throw e
+      case Failure(e) => throw e
     }
 
     val challTxt = readFile(cliArgs.challInput)
@@ -55,14 +45,11 @@ object Day01 {
         val intChallTxt = lines.map(entry => entry.toInt)
         // Part 1
         val increases = Day01Part1.findIncreasingDepths(intChallTxt)
-        val increasesFunctional =
-          Day01Part1.functionalFindIncreasingDepths(intChallTxt)
+        val increasesFunctional = Day01Part1.functionalFindIncreasingDepths(intChallTxt)
         println(s"Day 1 Part 1: $increases.")
 
         // Part 2
-        val windowSums = Day01Part2
-          .produceWindows(3, 1, intChallTxt)
-          .map(pairing => pairing.sum)
+        val windowSums = Day01Part2.produceWindows(3, 1, intChallTxt).map(pairing => pairing.sum)
         val windowedIncreases = Day01Part1.findIncreasingDepths(windowSums)
         println(s"Day 1 Part 2: $windowedIncreases.")
 
