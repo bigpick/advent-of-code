@@ -42,3 +42,20 @@ object FileParser {
     Using(Source.fromFile(filePath)) { _.getLines.toSeq }
   }
 }
+
+object Runner {
+  type Solution = Seq[String] => Any
+  val NotImplemented: Solution = (_ => "Not Implemented")
+
+  def solveOne(args: Array[String], day: Int, p1: Solution) = solve(args, day, p1, NotImplemented)
+
+  def solve(args: Array[String], day: Int, p1: Solution, p2: Solution) = {
+    val result = for {
+      cli <- AOCCliParser.parseCli(args)
+      file <- FileParser.readFile(cli.challInput)
+    } yield {
+      s"========== Day ${day.toString} ==========\np1: ${p1(file)}\np2: ${p2(file)}"
+    }
+    println(result.get)
+  }
+}
