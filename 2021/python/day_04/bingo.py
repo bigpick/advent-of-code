@@ -23,9 +23,6 @@ class BingoSquare:
     def __str__(self) -> str:
         return dumps(self.__dict__)
 
-    def is_marked(self) -> bool:
-        return self.box["marked"]
-
     def set_value(self, val: int) -> None:
         self.box["value"] = val
 
@@ -138,17 +135,6 @@ class BingoCard:
         return BingoCard(rows)
 
 
-# def find_first_bingo(
-#    boards: List[BingoCard], picked_nums: List[int]
-# ) -> Optional[Tuple[int, int, BingoCard]]:
-#    for num in picked_nums:
-#        for card in boards:
-#            (bingo, score) = card.mark(num)
-#            if bingo:
-#                return score, num, card
-#    return None
-
-
 def find_all_bingos(
     boards: List[BingoCard], picked_nums: List[int]
 ) -> List[Tuple[int, int, BingoCard]]:
@@ -156,8 +142,7 @@ def find_all_bingos(
     for num in picked_nums:
         for card in boards:
             (bingo, score) = card.mark(num)
-            if bingo:
-                boards.remove(card)
+            if bingo and card not in [x[2] for x in bingos]:
                 bingos.append((score, num, card))
     return bingos
 
