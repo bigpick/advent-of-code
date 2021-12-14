@@ -75,7 +75,7 @@ class BingoCard:
                 potentially marking off the value.
         """
         # Try to mark a num
-        [cardd.mark(val) for row in self.card for cardd in row]
+        _ = [cardd.mark(val) for row in self.card for cardd in row]
         return self.has_bingo()
 
     def has_bingo(self) -> Tuple[bool, int]:
@@ -157,8 +157,6 @@ def find_all_bingos(
         for card in boards:
             (bingo, score) = card.mark(num)
             if bingo:
-                print(f"===== bingo on {num}")
-                print(card)
                 boards.remove(card)
                 bingos.append((score, num, card))
     return bingos
