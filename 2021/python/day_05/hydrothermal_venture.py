@@ -18,7 +18,7 @@ class LineSegment:
         self.y2 = y2
 
     def __str__(self) -> str:
-        return f"LineSegment( {self.x1},{self.y1} -> {self.x2},{self.y2} )"
+        return f"LineSegment( {self.y1},{self.x1} -> {self.y2},{self.x2} )"
 
     @classmethod
     def from_str(cls, coords: str) -> "LineSegment":
@@ -30,10 +30,10 @@ class LineSegment:
         """
         first_point, second_point = [coord.split(",") for coord in coords.split(" -> ")]
         return LineSegment(
-            int(first_point[0]),
             int(first_point[1]),
-            int(second_point[0]),
+            int(first_point[0]),
             int(second_point[1]),
+            int(second_point[0]),
         )
 
 
@@ -94,19 +94,26 @@ class OceanFloor:
     def add_segment(self, segment: LineSegment) -> None:
         xdiff = segment.x2 - segment.x1
         ydiff = segment.y2 - segment.y1
-        # singular point
         if xdiff == ydiff == 0:
             self._increment_point(segment.x1, segment.y1)
 
-        elif xdiff == 0:
-            # vertical line
-            for ycoord in range(segment.y1, segment.y1 + ydiff + 1):
-                self._increment_point(segment.x1, ycoord)
+        elif xdiff == 0:  # horizontal line
+            if ydiff > 0:
+                for ycoord in range(segment.y1, segment.y1 + ydiff + 1):
+                    self._increment_point(segment.x1, ycoord)
+            else:
+                maxy = max(segment.y1, segment.y2)
+                for ycoord in range(maxy, maxy + (ydiff - 1), -1):
+                    self._increment_point(segment.x1, ycoord)
+        elif ydiff == 0:  # vertical
+            if xdiff > 0:
+                for xcoord in range(segment.x1, segment.x1 + xdiff + 1):
+                    self._increment_point(xcoord, segment.y1)
+            else:
+                maxx = max(segment.x1, segment.x2)
+                for xcoord in range(maxx, maxx + (xdiff - 1), -1):
+                    self._increment_point(xcoord, segment.y1)
 
-        elif ydiff == 0:
-            # horizontal line
-            for xcoord in range(segment.x1, segment.x1 + xdiff + 1):
-                self._increment_point(xcoord, segment.y1)
         else:
             pass
             # print("Hey, you said only vertical and horizontal!")
@@ -120,18 +127,33 @@ class OceanFloor:
         return total
 
 
+EXAMPLE = """0,9 -> 5,9
+8,0 -> 0,8
+9,4 -> 3,4
+2,2 -> 2,1
+7,0 -> 7,4
+6,4 -> 2,0
+0,9 -> 2,9
+3,4 -> 1,4
+0,0 -> 8,8
+5,5 -> 8,2
+"""
+
+
 def main(cli_args: Namespace):
     chall_txt = parse_file(cli_args.chall_input).strip().split("\n")
     segments = []
     for line in chall_txt:
+        # for line in EXAMPLE.split("\n"):
+        #    if line:
         segments.append(LineSegment.from_str(line.strip()))
 
     floor = OceanFloor()
     for segment in segments:
         floor.add_segment(segment)
 
-    # print(floor)
-    print(floor.find_total_overlapping())
+    print(floor)
+    #print(floor.find_total_overlapping())
 
 
 if __name__ == "__main__":
